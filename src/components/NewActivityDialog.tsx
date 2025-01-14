@@ -24,8 +24,23 @@ import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 
 interface NewActivityDialogProps {
-  onSave: (activity: { name: string; schedule: string; day?: string }) => void;
+  onSave: (activity: { 
+    name: string; 
+    schedule: string; 
+    day?: string;
+    color: string;
+  }) => void;
 }
+
+const COLORS = [
+  "#8B5CF6", // Vivid Purple
+  "#D946EF", // Magenta Pink
+  "#F97316", // Bright Orange
+  "#0EA5E9", // Ocean Blue
+  "#10B981", // Emerald
+  "#EF4444", // Red
+  "#F59E0B", // Amber
+];
 
 export const NewActivityDialog = ({ onSave }: NewActivityDialogProps) => {
   const [open, setOpen] = useState(false);
@@ -33,6 +48,7 @@ export const NewActivityDialog = ({ onSave }: NewActivityDialogProps) => {
   const [schedule, setSchedule] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [selectedColor, setSelectedColor] = useState(COLORS[0]);
 
   const handleSave = () => {
     if (name && schedule) {
@@ -45,7 +61,8 @@ export const NewActivityDialog = ({ onSave }: NewActivityDialogProps) => {
       onSave({ 
         name, 
         schedule,
-        day: needsDays ? selectedDays.join(", ") : (needsDay ? selectedDay : undefined)
+        day: needsDays ? selectedDays.join(", ") : (needsDay ? selectedDay : undefined),
+        color: selectedColor
       });
       
       setName("");
@@ -97,6 +114,24 @@ export const NewActivityDialog = ({ onSave }: NewActivityDialogProps) => {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Color</label>
+            <div className="flex gap-2">
+              {COLORS.map((color) => (
+                <button
+                  key={color}
+                  className={`w-8 h-8 rounded-full ${
+                    selectedColor === color ? "ring-2 ring-offset-2 ring-primary" : ""
+                  }`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => setSelectedColor(color)}
+                  type="button"
+                />
+              ))}
+            </div>
+          </div>
+
           <div className="space-y-2">
             <label className="text-sm font-medium">Schedule</label>
             <Select value={schedule} onValueChange={(value) => {

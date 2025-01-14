@@ -1,4 +1,4 @@
-import { Calendar, CheckCircle2, Edit, Trash2 } from "lucide-react";
+import { Calendar, CheckCircle2, Edit, Trash2, Circle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,7 @@ interface ActivityCardProps {
     day?: string;
     streak: number;
     lastCompleted?: string;
+    color: string;
   };
   onComplete: (id: string) => void;
   onEdit: (id: string) => void;
@@ -27,11 +28,14 @@ export const ActivityCard = ({ activity, onComplete, onEdit, onDelete }: Activit
   return (
     <Card className="p-6 animate-in">
       <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <h3 className="font-semibold text-lg">{activity.name}</h3>
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Calendar className="mr-2 h-4 w-4" />
-            <span>{scheduleText}</span>
+        <div className="flex items-center space-x-3">
+          <Circle className="h-6 w-6" fill={activity.color} stroke="none" />
+          <div className="space-y-1">
+            <h3 className="font-semibold text-lg">{activity.name}</h3>
+            <div className="flex items-center text-sm text-muted-foreground">
+              <Calendar className="mr-2 h-4 w-4" />
+              <span>{scheduleText}</span>
+            </div>
           </div>
         </div>
         <div className="flex items-center space-x-2">

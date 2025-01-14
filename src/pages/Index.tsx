@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ActivityCard } from "@/components/ActivityCard";
+import { ActivityCalendar } from "@/components/ActivityCalendar";
 import { NewActivityDialog } from "@/components/NewActivityDialog";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -10,19 +11,26 @@ interface Activity {
   day?: string;
   streak: number;
   lastCompleted?: string;
+  color: string;
 }
 
 const Index = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const { toast } = useToast();
 
-  const handleNewActivity = (activityData: { name: string; schedule: string; day?: string }) => {
+  const handleNewActivity = (activityData: { 
+    name: string; 
+    schedule: string; 
+    day?: string;
+    color: string;
+  }) => {
     const newActivity: Activity = {
       id: crypto.randomUUID(),
       name: activityData.name,
       schedule: activityData.schedule,
       day: activityData.day,
       streak: 0,
+      color: activityData.color,
     };
     setActivities([...activities, newActivity]);
     toast({
@@ -65,7 +73,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background p-6 md:p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Health Habits</h1>
@@ -74,24 +82,28 @@ const Index = () => {
           <NewActivityDialog onSave={handleNewActivity} />
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          {activities.length === 0 ? (
-            <div className="col-span-full text-center py-12 bg-muted/50 rounded-lg">
-              <p className="text-muted-foreground">
-                No activities yet. Create one to get started!
-              </p>
-            </div>
-          ) : (
-            activities.map((activity) => (
-              <ActivityCard
-                key={activity.id}
-                activity={activity}
-                onComplete={handleComplete}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
-            ))
-          )}
+        <div className="grid gap-8 lg:grid-cols-[1fr,400px]">
+          <div className="space-y-4">
+            {activities.length === 0 ? (
+              <div className="text-center py-12 bg-muted/50 rounded-lg">
+                <p className="text-muted-foreground">
+                  No activities yet. Create one to get started!
+                </p>
+              </div>
+            ) : (
+              activities.map((activity) => (
+                <ActivityCard
+                  key={activity.id}
+                  activity={activity}
+                  onComplete={handleComplete}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+              ))
+            )}
+          </div>
+          
+          <ActivityCalendar activities={activities} />
         </div>
       </div>
     </div>
