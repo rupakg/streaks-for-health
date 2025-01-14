@@ -8,6 +8,7 @@ interface ActivityCardProps {
     id: string;
     name: string;
     schedule: string;
+    day?: string;
     streak: number;
     lastCompleted?: string;
   };
@@ -19,6 +20,10 @@ interface ActivityCardProps {
 export const ActivityCard = ({ activity, onComplete, onEdit, onDelete }: ActivityCardProps) => {
   const isCompletedToday = activity.lastCompleted === new Date().toISOString().split('T')[0];
 
+  const scheduleText = activity.day 
+    ? `${activity.schedule} on ${activity.day}`
+    : activity.schedule;
+
   return (
     <Card className="p-6 animate-in">
       <div className="flex items-start justify-between">
@@ -26,7 +31,7 @@ export const ActivityCard = ({ activity, onComplete, onEdit, onDelete }: Activit
           <h3 className="font-semibold text-lg">{activity.name}</h3>
           <div className="flex items-center text-sm text-muted-foreground">
             <Calendar className="mr-2 h-4 w-4" />
-            <span>{activity.schedule}</span>
+            <span>{scheduleText}</span>
           </div>
         </div>
         <div className="flex items-center space-x-2">
