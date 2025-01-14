@@ -7,6 +7,7 @@ interface Activity {
   id: string;
   name: string;
   schedule: string;
+  day?: string;
   streak: number;
   lastCompleted?: string;
 }
@@ -15,11 +16,12 @@ const Index = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const { toast } = useToast();
 
-  const handleNewActivity = (activityData: { name: string; schedule: string }) => {
+  const handleNewActivity = (activityData: { name: string; schedule: string; day?: string }) => {
     const newActivity: Activity = {
       id: crypto.randomUUID(),
       name: activityData.name,
       schedule: activityData.schedule,
+      day: activityData.day,
       streak: 0,
     };
     setActivities([...activities, newActivity]);

@@ -15,25 +15,46 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 
 interface NewActivityDialogProps {
-  onSave: (activity: { name: string; schedule: string }) => void;
+  onSave: (activity: { name: string; schedule: string; day?: string }) => void;
 }
 
 export const NewActivityDialog = ({ onSave }: NewActivityDialogProps) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [schedule, setSchedule] = useState("");
+  const [selectedDay, setSelectedDay] = useState("");
 
   const handleSave = () => {
     if (name && schedule) {
-      onSave({ name, schedule });
+      const needsDay = ["weekly", "weekdays", "weekends"].includes(schedule);
+      if (needsDay && !selectedDay) return;
+
+      onSave({ 
+        name, 
+        schedule,
+        day: needsDay ? selectedDay : undefined
+      });
       setName("");
       setSchedule("");
+      setSelectedDay("");
       setOpen(false);
     }
   };
+
+  const showDayPicker = ["weekly", "weekdays", "weekends"].includes(schedule);
+  const days = schedule === "weekends" 
+    ? ["Saturday", "Sunday"]
+    : schedule === "weekdays"
+    ? ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    : ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -61,7 +82,10 @@ export const NewActivityDialog = ({ onSave }: NewActivityDialogProps) => {
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Schedule</label>
-            <Select value={schedule} onValueChange={setSchedule}>
+            <Select value={schedule} onValueChange={(value) => {
+              setSchedule(value);
+              setSelectedDay("");
+            }}>
               <SelectTrigger>
                 <SelectValue placeholder="Select schedule" />
               </SelectTrigger>
@@ -73,7 +97,26 @@ export const NewActivityDialog = ({ onSave }: NewActivityDialogProps) => {
               </SelectContent>
             </Select>
           </div>
-          <Button className="w-full" onClick={handleSave}>
+          
+          {showDayPicker && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Select Day</label>
+              <RadioGroup value={selectedDay} onValueChange={setSelectedDay} className="grid grid-cols-1 gap-2">
+                {days.map((day) => (
+                  <div key={day} className="flex items-center space-x-2">
+                    <RadioGroupItem value={day} id={day} />
+                    <Label htmlFor={day}>{day}</Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            </div>
+          )}
+
+          <Button 
+            className="w-full" 
+            onClick={handleSave}
+            disabled={showDayPicker && !selectedDay}
+          >
             Create Activity
           </Button>
         </div>
