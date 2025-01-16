@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle2 } from "lucide-react";
 import { format } from "date-fns";
 
 interface Activity {
@@ -77,16 +77,22 @@ export const ActivityCalendar = ({ activities }: ActivityCalendarProps) => {
               <div className="relative w-full h-full flex items-center justify-center">
                 <div>{date.getDate()}</div>
                 {dayActivities.length > 0 && (
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 flex gap-0.5">
-                    {dayActivities.map((activity, index) => (
-                      <div
-                        key={index}
-                        className="w-1.5 h-1.5 rounded-full"
-                        style={{ backgroundColor: activity.color }}
-                        title={activity.name}
-                      />
-                    ))}
-                  </div>
+                  <>
+                    <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 flex gap-0.5">
+                      {dayActivities.map((activity, index) => (
+                        <div
+                          key={index}
+                          className="w-1.5 h-1.5 rounded-full"
+                          style={{ backgroundColor: activity.color }}
+                          title={activity.name}
+                        />
+                      ))}
+                    </div>
+                    <CheckCircle2 
+                      className="absolute top-0 right-0 text-primary opacity-20" 
+                      size={12}
+                    />
+                  </>
                 )}
               </div>
             );
