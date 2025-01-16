@@ -36,6 +36,20 @@ npm i
 npm run dev
 ```
 
+**Run with Docker**
+
+If you prefer to run the application in a container, you can use Docker:
+
+```sh
+# Build the Docker image
+docker build -t streaks-for-health .
+
+# Run the container
+docker run -p 8080:8080 streaks-for-health
+```
+
+The application will be available at http://localhost:8080
+
 **Edit a file directly in GitHub**
 
 - Navigate to the desired file(s).
@@ -52,7 +66,7 @@ npm run dev
 
 ## What technologies are used for this project?
 
-This project is built with .
+This project is built with:
 
 - Vite
 - TypeScript
