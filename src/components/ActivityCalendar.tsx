@@ -32,6 +32,11 @@ export const ActivityCalendar = ({ activities }: ActivityCalendarProps) => {
     return acc;
   }, {} as Record<string, { name: string; color: string; }[]>);
 
+  const handleMonthChange = (direction: 'prev' | 'next') => {
+    const newDate = new Date(date.getFullYear(), date.getMonth() + (direction === 'next' ? 1 : -1));
+    setDate(newDate);
+  };
+
   return (
     <Card className="p-4">
       <div className="flex items-center justify-between mb-4">
@@ -40,7 +45,7 @@ export const ActivityCalendar = ({ activities }: ActivityCalendarProps) => {
           <Button
             variant="outline"
             size="icon"
-            onClick={() => setDate(new Date(date.getFullYear(), date.getMonth() - 1))}
+            onClick={() => handleMonthChange('prev')}
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -50,7 +55,7 @@ export const ActivityCalendar = ({ activities }: ActivityCalendarProps) => {
           <Button
             variant="outline"
             size="icon"
-            onClick={() => setDate(new Date(date.getFullYear(), date.getMonth() + 1))}
+            onClick={() => handleMonthChange('next')}
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -61,6 +66,7 @@ export const ActivityCalendar = ({ activities }: ActivityCalendarProps) => {
         mode="single"
         selected={date}
         onSelect={(newDate) => newDate && setDate(newDate)}
+        month={date}
         className="rounded-md border"
         components={{
           DayContent: ({ date }) => {
