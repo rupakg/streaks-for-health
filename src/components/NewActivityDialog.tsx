@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,15 +21,26 @@ import {
 } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Plus } from "lucide-react";
+import { Plus, Edit2 } from "lucide-react";
+
+interface Activity {
+  id: string;
+  name: string;
+  schedule: string;
+  day?: string;
+  color: string;
+}
 
 interface NewActivityDialogProps {
   onSave: (activity: { 
+    id?: string;
     name: string; 
     schedule: string; 
     day?: string;
     color: string;
   }) => void;
+  activity?: Activity;
+  mode?: 'create' | 'edit';
 }
 
 const COLORS = [
@@ -42,13 +53,29 @@ const COLORS = [
   "#F59E0B", // Amber
 ];
 
-export const NewActivityDialog = ({ onSave }: NewActivityDialogProps) => {
+export const NewActivityDialog = ({ onSave, activity, mode = 'create' }: NewActivityDialogProps) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [schedule, setSchedule] = useState("");
   const [selectedDay, setSelectedDay] = useState("");
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState(COLORS[0]);
+
+  useEffect(() => {
+    if (activity && mode === 'edit') {
+      setName(activity.name);
+      setSchedule(activity.schedule);
+      setSelectedColor(activity.color);
+      
+      if (activity.day) {
+        if (activity.schedule === 'weekly') {
+          setSelectedDay(activity.day);
+        } else {
+          setSelectedDays(activity.day.split(', '));
+        }
+      }
+    }
+  }, [activity, mode]);
 
   const handleSave = () => {
     if (name && schedule) {
@@ -59,6 +86,7 @@ export const NewActivityDialog = ({ onSave }: NewActivityDialogProps) => {
       if (needsDays && selectedDays.length === 0) return;
 
       onSave({ 
+        id: activity?.id,
         name, 
         schedule,
         day: needsDays ? selectedDays.join(", ") : (needsDay ? selectedDay : undefined),
@@ -70,6 +98,34 @@ export const NewActivityDialog = ({ onSave }: NewActivityDialogProps) => {
       setSelectedDay("");
       setSelectedDays([]);
       setOpen(false);
+    }
+  };
+
+  const resetForm = () => {
+    if (mode === 'edit' && activity) {
+      setName(activity.name);
+      setSchedule(activity.schedule);
+      setSelectedColor(activity.color);
+      if (activity.day) {
+        if (activity.schedule === 'weekly') {
+          setSelectedDay(activity.day);
+        } else {
+          setSelectedDays(activity.day.split(', '));
+        }
+      }
+    } else {
+      setName("");
+      setSchedule("");
+      setSelectedDay("");
+      setSelectedDays([]);
+      setSelectedColor(COLORS[0]);
+    }
+  };
+
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+    if (newOpen) {
+      resetForm();
     }
   };
 
@@ -91,16 +147,22 @@ export const NewActivityDialog = ({ onSave }: NewActivityDialogProps) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button className="gap-2">
-          <Plus className="h-4 w-4" />
-          New Activity
-        </Button>
+        {mode === 'create' ? (
+          <Button className="gap-2">
+            <Plus className="h-4 w-4" />
+            New Activity
+          </Button>
+        ) : (
+          <Button variant="ghost" size="icon">
+            <Edit2 className="h-4 w-4" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create New Activity</DialogTitle>
+          <DialogTitle>{mode === 'create' ? 'Create New Activity' : 'Edit Activity'}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
@@ -188,7 +250,7 @@ export const NewActivityDialog = ({ onSave }: NewActivityDialogProps) => {
             onClick={handleSave}
             disabled={(showDayPicker && !selectedDay) || (showDaysPicker && selectedDays.length === 0)}
           >
-            Create Activity
+            {mode === 'create' ? 'Create Activity' : 'Save Changes'}
           </Button>
         </div>
       </DialogContent>

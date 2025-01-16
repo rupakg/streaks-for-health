@@ -18,25 +18,40 @@ const Index = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const { toast } = useToast();
 
-  const handleNewActivity = (activityData: { 
+  const handleSaveActivity = (activityData: { 
+    id?: string;
     name: string; 
     schedule: string; 
     day?: string;
     color: string;
   }) => {
-    const newActivity: Activity = {
-      id: crypto.randomUUID(),
-      name: activityData.name,
-      schedule: activityData.schedule,
-      day: activityData.day,
-      streak: 0,
-      color: activityData.color,
-    };
-    setActivities([...activities, newActivity]);
-    toast({
-      title: "Activity created",
-      description: `${activityData.name} has been added to your activities.`,
-    });
+    if (activityData.id) {
+      // Edit existing activity
+      setActivities(activities.map(activity => 
+        activity.id === activityData.id 
+          ? { ...activity, ...activityData }
+          : activity
+      ));
+      toast({
+        title: "Activity updated",
+        description: `${activityData.name} has been updated.`,
+      });
+    } else {
+      // Create new activity
+      const newActivity: Activity = {
+        id: crypto.randomUUID(),
+        name: activityData.name,
+        schedule: activityData.schedule,
+        day: activityData.day,
+        streak: 0,
+        color: activityData.color,
+      };
+      setActivities([...activities, newActivity]);
+      toast({
+        title: "Activity created",
+        description: `${activityData.name} has been added to your activities.`,
+      });
+    }
   };
 
   const handleComplete = (id: string) => {
@@ -55,14 +70,6 @@ const Index = () => {
     }));
   };
 
-  const handleEdit = (id: string) => {
-    // To be implemented in future iterations
-    toast({
-      title: "Coming soon",
-      description: "Edit functionality will be available in the next update.",
-    });
-  };
-
   const handleDelete = (id: string) => {
     setActivities(activities.filter(activity => activity.id !== id));
     toast({
@@ -79,7 +86,7 @@ const Index = () => {
             <h1 className="text-3xl font-bold">Health Habits</h1>
             <p className="text-muted-foreground mt-1">Track your daily health activities</p>
           </div>
-          <NewActivityDialog onSave={handleNewActivity} />
+          <NewActivityDialog onSave={handleSaveActivity} />
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[1fr,400px]">
@@ -96,7 +103,7 @@ const Index = () => {
                   key={activity.id}
                   activity={activity}
                   onComplete={handleComplete}
-                  onEdit={handleEdit}
+                  onEdit={() => {}}
                   onDelete={handleDelete}
                 />
               ))

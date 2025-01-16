@@ -1,7 +1,8 @@
-import { Calendar, CheckCircle2, Edit, Trash2, Circle } from "lucide-react";
+import { Calendar, CheckCircle2, Edit2, Trash2, Circle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { NewActivityDialog } from "@/components/NewActivityDialog";
 
 interface ActivityCardProps {
   activity: {
@@ -39,13 +40,15 @@ export const ActivityCard = ({ activity, onComplete, onEdit, onDelete }: Activit
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onEdit(activity.id)}
-          >
-            <Edit className="h-4 w-4" />
-          </Button>
+          <NewActivityDialog 
+            mode="edit"
+            activity={activity}
+            onSave={(updatedActivity) => {
+              if (updatedActivity.id) {
+                onEdit(updatedActivity.id);
+              }
+            }}
+          />
           <Button
             variant="ghost"
             size="icon"
