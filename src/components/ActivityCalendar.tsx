@@ -89,7 +89,7 @@ export const ActivityCalendar = ({ activities }: ActivityCalendarProps) => {
                       ))}
                     </div>
                     <CheckCircle2 
-                      className="absolute top-0 right-0 text-primary opacity-20" 
+                      className="absolute top-0 right-0 text-primary opacity-50" 
                       size={12}
                     />
                   </>
