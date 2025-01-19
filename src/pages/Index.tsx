@@ -95,8 +95,8 @@ const Index = () => {
           <NewActivityDialog onSave={handleSaveActivity} />
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-[1fr,400px] gap-8">
-          <div className="order-2 xl:order-1">
+        <div className="grid grid-cols-3 gap-8">
+          <div className="col-span-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {activities.length === 0 ? (
                 <div className="text-center py-12 bg-muted/50 rounded-lg md:col-span-2">
@@ -118,7 +118,7 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="order-1 xl:order-2 xl:sticky xl:top-8">
+          <div className="sticky top-8">
             <ActivityCalendar activities={activities} />
           </div>
         </div>
