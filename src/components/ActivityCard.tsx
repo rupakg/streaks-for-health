@@ -15,7 +15,13 @@ interface ActivityCardProps {
     color: string;
   };
   onComplete: (id: string) => void;
-  onEdit: (id: string) => void;
+  onEdit: (activityData: { 
+    id?: string;
+    name: string;
+    schedule: string;
+    day?: string;
+    color: string;
+  }) => void;
   onDelete: (id: string) => void;
 }
 
@@ -43,11 +49,7 @@ export const ActivityCard = ({ activity, onComplete, onEdit, onDelete }: Activit
           <NewActivityDialog 
             mode="edit"
             activity={activity}
-            onSave={(updatedActivity) => {
-              if (updatedActivity.id) {
-                onEdit(updatedActivity.id);
-              }
-            }}
+            onSave={onEdit}
           />
           <Button
             variant="ghost"
