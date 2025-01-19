@@ -86,8 +86,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background p-6 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <div className="flex items-center justify-between">
+      <div className="max-w-[1600px] mx-auto">
+        <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold">Health Habits</h1>
             <p className="text-muted-foreground mt-1">Track your daily health activities</p>
@@ -95,28 +95,32 @@ const Index = () => {
           <NewActivityDialog onSave={handleSaveActivity} />
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[1fr,400px]">
-          <div className="space-y-4">
-            {activities.length === 0 ? (
-              <div className="text-center py-12 bg-muted/50 rounded-lg">
-                <p className="text-muted-foreground">
-                  No activities yet. Create one to get started!
-                </p>
-              </div>
-            ) : (
-              activities.map((activity) => (
-                <ActivityCard
-                  key={activity.id}
-                  activity={activity}
-                  onComplete={handleComplete}
-                  onEdit={handleSaveActivity}
-                  onDelete={handleDelete}
-                />
-              ))
-            )}
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr,400px] gap-8">
+          <div className="order-2 xl:order-1">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {activities.length === 0 ? (
+                <div className="text-center py-12 bg-muted/50 rounded-lg md:col-span-2">
+                  <p className="text-muted-foreground">
+                    No activities yet. Create one to get started!
+                  </p>
+                </div>
+              ) : (
+                activities.map((activity) => (
+                  <ActivityCard
+                    key={activity.id}
+                    activity={activity}
+                    onComplete={handleComplete}
+                    onEdit={handleSaveActivity}
+                    onDelete={handleDelete}
+                  />
+                ))
+              )}
+            </div>
           </div>
           
-          <ActivityCalendar activities={activities} />
+          <div className="order-1 xl:order-2 xl:sticky xl:top-8">
+            <ActivityCalendar activities={activities} />
+          </div>
         </div>
       </div>
     </div>
