@@ -118,7 +118,7 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="sticky top-8">
+          <div className="sticky top-8 min-w-[320px]">
             <ActivityCalendar activities={activities} />
           </div>
         </div>
