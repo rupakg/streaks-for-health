@@ -27,9 +27,15 @@ const Index = () => {
   }) => {
     if (activityData.id) {
       // Edit existing activity
-      setActivities(activities.map(activity => 
+      setActivities(prevActivities => prevActivities.map(activity => 
         activity.id === activityData.id 
-          ? { ...activity, ...activityData }
+          ? {
+              ...activity,
+              name: activityData.name,
+              schedule: activityData.schedule,
+              day: activityData.day,
+              color: activityData.color,
+            }
           : activity
       ));
       toast({
@@ -103,7 +109,7 @@ const Index = () => {
                   key={activity.id}
                   activity={activity}
                   onComplete={handleComplete}
-                  onEdit={() => {}}
+                  onEdit={handleSaveActivity}
                   onDelete={handleDelete}
                 />
               ))
