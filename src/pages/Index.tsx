@@ -89,7 +89,7 @@ const Index = () => {
       <div className="max-w-[1600px] mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold">Health Habits</h1>
+            <h1 className="text-3xl font-bold">Habit Tracker</h1>
             <p className="text-muted-foreground mt-1">Track your daily health activities</p>
           </div>
           <NewActivityDialog onSave={handleSaveActivity} />
