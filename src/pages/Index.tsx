@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { ActivityCard } from "@/components/ActivityCard";
 import { ActivityCalendar } from "@/components/ActivityCalendar";
@@ -14,7 +15,7 @@ interface Activity {
   color: string;
 }
 
-const Index = () => {
+export default function Index() {
   const [activities, setActivities] = useState<Activity[]>([]);
   const { toast } = useToast();
 
@@ -125,6 +126,4 @@ const Index = () => {
       </div>
     </div>
   );
-};
-
-export default Index;
+}
